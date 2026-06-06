@@ -1,9 +1,23 @@
 package com.auvan.backend.auth.service;
 
+import com.auvan.backend.auth.dto.AuthResponse;
+import com.auvan.backend.auth.dto.LineAuthRequest;
+import com.auvan.backend.auth.enums.AuthProvider;
+import com.auvan.backend.shared.exception.UnauthorizedException;
+import com.auvan.backend.shared.mapper.EntityMappers;
+import com.auvan.backend.shared.security.JwtTokenProvider;
 import com.auvan.backend.user.entity.User;
+import com.auvan.backend.user.repository.UserRepository;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClient;
 
 @Slf4j
 @Service
