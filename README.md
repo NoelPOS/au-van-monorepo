@@ -58,4 +58,4 @@ pnpm test:api
 
 ## Project Direction
 
-The rewrite keeps the code intentionally simple. Controllers handle HTTP, services own business logic, repositories own persistence, DTOs define API contracts, and centralized exceptions keep errors consistent. Extra architecture is added only when it removes real complexity.
+The rewrite keeps the code intentionally simple. Backend code is grouped by domain, with controllers, DTOs, services, repositories, entities, enums, and domain-owned helpers kept close together. Shared infrastructure lives under `shared/`. Extra architecture is added only when it removes real complexity.

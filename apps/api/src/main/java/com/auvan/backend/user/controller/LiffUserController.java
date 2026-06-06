@@ -1,0 +1,40 @@
+package com.auvan.backend.user.controller;
+
+import com.auvan.backend.shared.security.CurrentUser;
+import com.auvan.backend.user.dto.UpdateUserRequest;
+import com.auvan.backend.shared.dto.ApiResponse;
+import com.auvan.backend.user.dto.UserResponse;
+import com.auvan.backend.shared.security.CustomUserDetails;
+import com.auvan.backend.user.service.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/liff/users")
+public class LiffUserController {
+
+    private final UserService userService;
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponse>> getMe(@AuthenticationPrincipal CustomUserDetails principal) {
+        return ResponseEntity.ok(ApiResponse.success(userService.getById(CurrentUser.id(principal))));
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponse>> updateMe(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @Valid @RequestBody UpdateUserRequest request) {
+        UserResponse response = userService.updateProfile(CurrentUser.id(principal), request);
+        return ResponseEntity.ok(ApiResponse.success(response, "Profile updated"));
+    }
+}

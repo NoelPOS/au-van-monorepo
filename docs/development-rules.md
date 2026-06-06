@@ -4,13 +4,16 @@ AU Van should stay simple, readable, and easy to explain.
 
 ## Backend
 
+- Group backend code by domain: `booking`, `payment`, `route`, `timeslot`, `seat`, `user`, `notification`, `reminder`, `audit`, `auth`, `dashboard`, and `line`.
+- Keep cross-cutting code in `shared`: config, common DTOs, exception handling, mapping, security, scheduling support, and idempotency.
 - Controllers are thin: parse input, call a service, return a response.
 - Services own business logic and transaction boundaries.
-- Repositories own database access.
-- DTOs define request and response shapes.
-- Exceptions go through centralized handlers.
+- Spring Data repositories own database access.
+- DTOs define request and response shapes inside the domain that owns the API.
+- Exceptions go through centralized handlers in `shared/exception`.
 - Security checks must be explicit at the API boundary.
 - Prefer straightforward methods over layered patterns that do not add value.
+- Do not add ports, adapters, command buses, or domain-event frameworks unless a real feature needs them.
 
 ## Frontend
 
