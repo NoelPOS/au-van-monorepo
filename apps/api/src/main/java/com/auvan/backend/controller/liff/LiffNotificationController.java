@@ -1,0 +1,60 @@
+package com.auvan.backend.controller.liff;
+
+import com.auvan.backend.dto.response.ApiResponse;
+import com.auvan.backend.dto.response.NotificationResponse;
+import com.auvan.backend.dto.response.PageResponse;
+import com.auvan.backend.exception.UnauthorizedException;
+import com.auvan.backend.security.CustomUserDetails;
+import com.auvan.backend.service.NotificationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/liff/notifications")
+public class LiffNotificationController {
+
+    private final NotificationService notificationService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<PageResponse<NotificationResponse>>> getMyNotifications(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        PageResponse<NotificationResponse> response =
+                notificationService.getMyNotifications(currentUserId(principal), page, size);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/unread-count")
+    public ResponseEntity<ApiResponse<Map<String, Long>>> countUnread(
+            @AuthenticationPrincipal CustomUserDetails principal) {
+        long unread = notificationService.countUnread(currentUserId(principal));
+        return ResponseEntity.ok(ApiResponse.success(Map.of("unread", unread)));
+    }
+
+    @PutMapping("/{id}/read")
+    public ResponseEntity<ApiResponse<NotificationResponse>> markRead(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @PathVariable UUID id) {
+        NotificationResponse response = notificationService.markRead(id, currentUserId(principal));
+        return ResponseEntity.ok(ApiResponse.success(response, "Notification marked as read"));
+    }
+
+    private UUID currentUserId(CustomUserDetails principal) {
+        if (principal == null) {
+            throw new UnauthorizedException("Authentication required");
+        }
+        return principal.getUserId();
+    }
+}

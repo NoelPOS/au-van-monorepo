@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# frontend builds and tests
+dist/
+coverage/
+test-results/
+playwright-report/
+*.tsbuildinfo
+
+# backend builds
+target/
+build/
+
+# local env and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

@@ -1,0 +1,17 @@
+{
+  "name": "au-van-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev:web": "pnpm --filter @au-van/web dev",
+    "build:web": "pnpm --filter @au-van/web build",
+    "test:web:e2e": "pnpm --filter @au-van/web test:e2e",
+    "dev:api": "node scripts/mvn.mjs spring-boot:run",
+    "test:api": "node scripts/mvn.mjs test",
+    "build:api": "node scripts/mvn.mjs package -DskipITs=true"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  }
+}
