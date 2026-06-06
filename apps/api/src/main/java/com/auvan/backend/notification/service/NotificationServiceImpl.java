@@ -1,25 +1,21 @@
 package com.auvan.backend.notification.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.notification.dto.NotificationResponse;
 import com.auvan.backend.shared.dto.PageResponse;
-import com.auvan.backend.notification.Notification;
-import com.auvan.backend.user.User;
-import com.auvan.backend.notification.DeliveryStatus;
-import com.auvan.backend.notification.NotificationChannel;
-import com.auvan.backend.notification.NotificationType;
+import com.auvan.backend.notification.entity.Notification;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.notification.enums.DeliveryStatus;
+import com.auvan.backend.notification.enums.NotificationChannel;
+import com.auvan.backend.notification.enums.NotificationType;
 import com.auvan.backend.shared.exception.ForbiddenException;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
-
-import com.auvan.backend.notification.NotificationRepository;
-import com.auvan.backend.notification.service.NotificationService;
+import com.auvan.backend.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Map;
 import java.util.UUID;
 

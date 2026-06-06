@@ -1,7 +1,6 @@
 package com.auvan.backend.timeslot.dto;
 
 import jakarta.validation.constraints.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;

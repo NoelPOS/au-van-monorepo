@@ -5,7 +5,6 @@ import com.auvan.backend.booking.dto.RescheduleRequest;
 import com.auvan.backend.booking.dto.UpdateBookingRequest;
 import com.auvan.backend.booking.dto.BookingResponse;
 import com.auvan.backend.shared.dto.PageResponse;
-
 import java.util.List;
 import java.util.UUID;
 

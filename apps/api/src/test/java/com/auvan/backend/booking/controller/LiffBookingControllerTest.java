@@ -1,18 +1,17 @@
 package com.auvan.backend.booking.controller;
 
-import com.auvan.backend.booking.controller.LiffBookingController;
 import com.auvan.backend.booking.dto.CreateBookingRequest;
 import com.auvan.backend.booking.dto.BookingResponse;
 import com.auvan.backend.payment.dto.PaymentResponse;
 import com.auvan.backend.route.dto.RouteResponse;
 import com.auvan.backend.timeslot.dto.TimeslotResponse;
-import com.auvan.backend.user.User;
-import com.auvan.backend.booking.BookingStatus;
-import com.auvan.backend.payment.PaymentMethod;
-import com.auvan.backend.payment.PaymentStatus;
-import com.auvan.backend.route.RouteStatus;
-import com.auvan.backend.booking.SourceChannel;
-import com.auvan.backend.timeslot.TimeslotStatus;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.booking.enums.BookingStatus;
+import com.auvan.backend.payment.enums.PaymentMethod;
+import com.auvan.backend.payment.enums.PaymentStatus;
+import com.auvan.backend.route.enums.RouteStatus;
+import com.auvan.backend.booking.enums.SourceChannel;
+import com.auvan.backend.timeslot.enums.TimeslotStatus;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
 import com.auvan.backend.shared.exception.UnauthorizedException;
 import com.auvan.backend.shared.security.CustomUserDetails;
@@ -24,14 +23,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;

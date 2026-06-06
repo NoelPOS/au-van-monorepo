@@ -1,12 +1,11 @@
 package com.auvan.backend.booking.dto;
 
-import com.auvan.backend.payment.PaymentMethod;
-import com.auvan.backend.booking.SourceChannel;
+import com.auvan.backend.payment.enums.PaymentMethod;
+import com.auvan.backend.booking.enums.SourceChannel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import java.util.List;
 import java.util.UUID;
 

@@ -1,8 +1,7 @@
 package com.auvan.backend.payment.dto;
 
-import com.auvan.backend.payment.PaymentMethod;
-import com.auvan.backend.payment.PaymentStatus;
-
+import com.auvan.backend.payment.enums.PaymentMethod;
+import com.auvan.backend.payment.enums.PaymentStatus;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;

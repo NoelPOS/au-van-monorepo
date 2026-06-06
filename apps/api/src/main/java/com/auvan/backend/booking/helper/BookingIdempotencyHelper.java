@@ -1,17 +1,16 @@
 package com.auvan.backend.booking.helper;
 
 import com.auvan.backend.booking.dto.BookingResponse;
-import com.auvan.backend.shared.idempotency.IdempotencyKey;
-import com.auvan.backend.shared.idempotency.IdempotencyStatus;
+import com.auvan.backend.shared.idempotency.entity.IdempotencyKey;
+import com.auvan.backend.shared.idempotency.enums.IdempotencyStatus;
 import com.auvan.backend.shared.exception.ConflictException;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
 import com.auvan.backend.shared.mapper.EntityMappers;
-import com.auvan.backend.booking.BookingRepository;
-import com.auvan.backend.shared.idempotency.IdempotencyService;
+import com.auvan.backend.booking.repository.BookingRepository;
+import com.auvan.backend.shared.idempotency.service.IdempotencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
 import java.util.UUID;
 import java.util.Optional;
 import java.util.function.Supplier;

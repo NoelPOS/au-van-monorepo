@@ -1,18 +1,16 @@
 package com.auvan.backend.dashboard.service;
 
 import com.auvan.backend.dashboard.dto.DashboardStatsResponse;
-import com.auvan.backend.booking.BookingStatus;
-import com.auvan.backend.payment.PaymentStatus;
-import com.auvan.backend.booking.BookingRepository;
-import com.auvan.backend.payment.PaymentRepository;
-import com.auvan.backend.timeslot.TimeslotRepository;
-import com.auvan.backend.user.UserRepository;
-import com.auvan.backend.dashboard.service.DashboardService;
+import com.auvan.backend.booking.enums.BookingStatus;
+import com.auvan.backend.payment.enums.PaymentStatus;
+import com.auvan.backend.booking.repository.BookingRepository;
+import com.auvan.backend.payment.repository.PaymentRepository;
+import com.auvan.backend.timeslot.repository.TimeslotRepository;
+import com.auvan.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 
 @Service

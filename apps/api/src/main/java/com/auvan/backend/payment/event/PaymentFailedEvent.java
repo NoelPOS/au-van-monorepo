@@ -1,7 +1,7 @@
 package com.auvan.backend.payment.event;
 
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.payment.Payment;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.payment.entity.Payment;
 import org.springframework.context.ApplicationEvent;
 
 public class PaymentFailedEvent extends ApplicationEvent {

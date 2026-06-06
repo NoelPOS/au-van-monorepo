@@ -1,22 +1,18 @@
 package com.auvan.backend.user.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.user.dto.UpdateUserRequest;
 import com.auvan.backend.shared.dto.PageResponse;
 import com.auvan.backend.user.dto.UserResponse;
-import com.auvan.backend.user.User;
+import com.auvan.backend.user.entity.User;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
-
-import com.auvan.backend.user.UserRepository;
-import com.auvan.backend.user.service.UserService;
+import com.auvan.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import java.util.UUID;
 
 @Service

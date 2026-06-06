@@ -1,6 +1,6 @@
 package com.auvan.backend.booking.event;
 
-import com.auvan.backend.booking.Booking;
+import com.auvan.backend.booking.entity.Booking;
 import org.springframework.context.ApplicationEvent;
 
 public class BookingConfirmedEvent extends ApplicationEvent {

@@ -3,8 +3,7 @@ package com.auvan.backend.user.service;
 import com.auvan.backend.user.dto.UpdateUserRequest;
 import com.auvan.backend.shared.dto.PageResponse;
 import com.auvan.backend.user.dto.UserResponse;
-import com.auvan.backend.user.User;
-
+import com.auvan.backend.user.entity.User;
 import java.util.UUID;
 
 public interface UserService {

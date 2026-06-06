@@ -1,9 +1,8 @@
 package com.auvan.backend.timeslot.dto;
 
-import com.auvan.backend.timeslot.TimeslotStatus;
+import com.auvan.backend.timeslot.enums.TimeslotStatus;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 

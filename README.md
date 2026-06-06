@@ -58,4 +58,4 @@ pnpm test:api
 
 ## Project Direction
 
-The rewrite keeps the code intentionally simple. Backend code is grouped by domain, with controllers, DTOs, services, repositories, entities, enums, and domain-owned helpers kept close together. Shared infrastructure lives under `shared/`. Extra architecture is added only when it removes real complexity.
+The rewrite keeps the code intentionally simple. Backend code is grouped by domain, with controllers, DTOs, services, repositories, entities, enums, and domain-owned helpers kept close together in their own folders. Domains only have repositories when they own persisted entities. Shared infrastructure lives under `shared/`. Extra architecture is added only when it removes real complexity.

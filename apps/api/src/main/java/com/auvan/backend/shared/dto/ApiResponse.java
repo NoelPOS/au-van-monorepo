@@ -1,7 +1,6 @@
 package com.auvan.backend.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.List;
 import java.util.Map;
 

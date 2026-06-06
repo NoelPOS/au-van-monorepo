@@ -8,7 +8,8 @@ AU Van should stay simple, readable, and easy to explain.
 - Keep cross-cutting code in `shared`: config, common DTOs, exception handling, mapping, security, scheduling support, and idempotency.
 - Controllers are thin: parse input, call a service, return a response.
 - Services own business logic and transaction boundaries.
-- Spring Data repositories own database access.
+- Spring Data repositories own database access and live under the domain's `repository/` folder.
+- Do not create fake repositories for domains that do not own persisted entities.
 - DTOs define request and response shapes inside the domain that owns the API.
 - Exceptions go through centralized handlers in `shared/exception`.
 - Security checks must be explicit at the API boundary.

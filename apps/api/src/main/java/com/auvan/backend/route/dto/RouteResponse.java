@@ -1,7 +1,6 @@
 package com.auvan.backend.route.dto;
 
-import com.auvan.backend.route.RouteStatus;
-
+import com.auvan.backend.route.enums.RouteStatus;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;

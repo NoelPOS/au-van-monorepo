@@ -1,13 +1,10 @@
 package com.auvan.backend.audit.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.audit.dto.AuditLogResponse;
 import com.auvan.backend.shared.dto.PageResponse;
-import com.auvan.backend.audit.AuditLog;
-
-import com.auvan.backend.audit.AuditLogRepository;
-import com.auvan.backend.audit.service.AuditLogService;
+import com.auvan.backend.audit.entity.AuditLog;
+import com.auvan.backend.audit.repository.AuditLogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +13,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Map;
 import java.util.UUID;
 

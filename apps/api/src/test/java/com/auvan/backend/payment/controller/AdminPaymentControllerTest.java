@@ -1,11 +1,10 @@
 package com.auvan.backend.payment.controller;
 
-import com.auvan.backend.payment.controller.AdminPaymentController;
 import com.auvan.backend.payment.dto.ReviewPaymentRequest;
 import com.auvan.backend.payment.dto.PaymentResponse;
-import com.auvan.backend.user.User;
-import com.auvan.backend.payment.PaymentMethod;
-import com.auvan.backend.payment.PaymentStatus;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.payment.enums.PaymentMethod;
+import com.auvan.backend.payment.enums.PaymentStatus;
 import com.auvan.backend.shared.security.CustomUserDetails;
 import com.auvan.backend.payment.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,11 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;

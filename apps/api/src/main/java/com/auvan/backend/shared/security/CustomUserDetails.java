@@ -1,10 +1,9 @@
 package com.auvan.backend.shared.security;
 
-import com.auvan.backend.user.User;
+import com.auvan.backend.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;

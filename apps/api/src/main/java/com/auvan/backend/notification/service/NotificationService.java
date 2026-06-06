@@ -2,9 +2,8 @@ package com.auvan.backend.notification.service;
 
 import com.auvan.backend.notification.dto.NotificationResponse;
 import com.auvan.backend.shared.dto.PageResponse;
-import com.auvan.backend.user.User;
-import com.auvan.backend.notification.NotificationType;
-
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.notification.enums.NotificationType;
 import java.util.Map;
 import java.util.UUID;
 

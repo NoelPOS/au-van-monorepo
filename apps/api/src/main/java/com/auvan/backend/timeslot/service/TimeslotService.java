@@ -4,8 +4,7 @@ import com.auvan.backend.timeslot.dto.BulkCreateTimeslotRequest;
 import com.auvan.backend.timeslot.dto.CreateTimeslotRequest;
 import com.auvan.backend.timeslot.dto.UpdateTimeslotRequest;
 import com.auvan.backend.timeslot.dto.TimeslotResponse;
-import com.auvan.backend.timeslot.Timeslot;
-
+import com.auvan.backend.timeslot.entity.Timeslot;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;

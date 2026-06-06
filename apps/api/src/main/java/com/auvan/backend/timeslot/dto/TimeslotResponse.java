@@ -1,7 +1,6 @@
 package com.auvan.backend.timeslot.dto;
 
-import com.auvan.backend.timeslot.TimeslotStatus;
-
+import com.auvan.backend.timeslot.enums.TimeslotStatus;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,23 +1,23 @@
 package com.auvan.backend.integration;
 
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.payment.Payment;
-import com.auvan.backend.route.Route;
-import com.auvan.backend.seat.Seat;
-import com.auvan.backend.timeslot.Timeslot;
-import com.auvan.backend.user.User;
-import com.auvan.backend.auth.AuthProvider;
-import com.auvan.backend.booking.BookingStatus;
-import com.auvan.backend.payment.PaymentStatus;
-import com.auvan.backend.route.RouteStatus;
-import com.auvan.backend.seat.SeatStatus;
-import com.auvan.backend.timeslot.TimeslotStatus;
-import com.auvan.backend.booking.BookingRepository;
-import com.auvan.backend.payment.PaymentRepository;
-import com.auvan.backend.route.RouteRepository;
-import com.auvan.backend.seat.SeatRepository;
-import com.auvan.backend.timeslot.TimeslotRepository;
-import com.auvan.backend.user.UserRepository;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.payment.entity.Payment;
+import com.auvan.backend.route.entity.Route;
+import com.auvan.backend.seat.entity.Seat;
+import com.auvan.backend.timeslot.entity.Timeslot;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.auth.enums.AuthProvider;
+import com.auvan.backend.booking.enums.BookingStatus;
+import com.auvan.backend.payment.enums.PaymentStatus;
+import com.auvan.backend.route.enums.RouteStatus;
+import com.auvan.backend.seat.enums.SeatStatus;
+import com.auvan.backend.timeslot.enums.TimeslotStatus;
+import com.auvan.backend.booking.repository.BookingRepository;
+import com.auvan.backend.payment.repository.PaymentRepository;
+import com.auvan.backend.route.repository.RouteRepository;
+import com.auvan.backend.seat.repository.SeatRepository;
+import com.auvan.backend.timeslot.repository.TimeslotRepository;
+import com.auvan.backend.user.repository.UserRepository;
 import com.auvan.backend.shared.security.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,14 +29,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BookingIntegrationTest extends AbstractIntegrationTest {

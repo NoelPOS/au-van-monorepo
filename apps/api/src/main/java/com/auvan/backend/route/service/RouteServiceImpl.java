@@ -1,22 +1,18 @@
 package com.auvan.backend.route.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.route.dto.CreateRouteRequest;
 import com.auvan.backend.route.dto.UpdateRouteRequest;
 import com.auvan.backend.route.dto.RouteResponse;
-import com.auvan.backend.route.Route;
-import com.auvan.backend.route.RouteStatus;
+import com.auvan.backend.route.entity.Route;
+import com.auvan.backend.route.enums.RouteStatus;
 import com.auvan.backend.shared.exception.ConflictException;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
-
-import com.auvan.backend.route.RouteRepository;
-import com.auvan.backend.route.service.RouteService;
+import com.auvan.backend.route.repository.RouteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Locale;

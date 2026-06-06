@@ -1,12 +1,11 @@
 package com.auvan.backend.booking.dto;
 
-import com.auvan.backend.booking.BookingStatus;
-import com.auvan.backend.booking.SourceChannel;
+import com.auvan.backend.booking.enums.BookingStatus;
+import com.auvan.backend.booking.enums.SourceChannel;
 import com.auvan.backend.payment.dto.PaymentResponse;
 import com.auvan.backend.route.dto.RouteResponse;
 import com.auvan.backend.seat.dto.SeatResponse;
 import com.auvan.backend.timeslot.dto.TimeslotResponse;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;

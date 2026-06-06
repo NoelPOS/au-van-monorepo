@@ -1,23 +1,21 @@
 package com.auvan.backend.reminder.service;
 
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.reminder.ReminderJob;
-import com.auvan.backend.user.User;
-import com.auvan.backend.notification.NotificationType;
-import com.auvan.backend.reminder.ReminderStatus;
-import com.auvan.backend.reminder.ReminderType;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.reminder.entity.ReminderJob;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.notification.enums.NotificationType;
+import com.auvan.backend.reminder.enums.ReminderStatus;
+import com.auvan.backend.reminder.enums.ReminderType;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
-import com.auvan.backend.booking.BookingRepository;
-import com.auvan.backend.reminder.ReminderJobRepository;
+import com.auvan.backend.booking.repository.BookingRepository;
+import com.auvan.backend.reminder.repository.ReminderJobRepository;
 import com.auvan.backend.notification.service.NotificationService;
-import com.auvan.backend.reminder.service.ReminderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

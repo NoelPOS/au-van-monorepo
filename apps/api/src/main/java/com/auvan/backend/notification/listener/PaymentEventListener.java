@@ -1,7 +1,7 @@
 package com.auvan.backend.notification.listener;
 
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.notification.NotificationType;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.notification.enums.NotificationType;
 import com.auvan.backend.payment.event.PaymentCompletedEvent;
 import com.auvan.backend.payment.event.PaymentFailedEvent;
 import com.auvan.backend.notification.service.NotificationService;
@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
 @Component

@@ -1,14 +1,13 @@
 package com.auvan.backend.shared.security;
 
-import com.auvan.backend.user.User;
-import com.auvan.backend.user.UserRepository;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.UUID;
 
 @Service

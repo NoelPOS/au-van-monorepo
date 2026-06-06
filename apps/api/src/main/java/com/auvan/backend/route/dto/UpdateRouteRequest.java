@@ -1,8 +1,7 @@
 package com.auvan.backend.route.dto;
 
-import com.auvan.backend.route.RouteStatus;
+import com.auvan.backend.route.enums.RouteStatus;
 import jakarta.validation.constraints.Positive;
-
 import java.math.BigDecimal;
 
 public record UpdateRouteRequest(

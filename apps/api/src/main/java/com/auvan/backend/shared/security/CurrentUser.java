@@ -1,8 +1,6 @@
 package com.auvan.backend.shared.security;
 
 import com.auvan.backend.shared.exception.UnauthorizedException;
-import com.auvan.backend.shared.security.CustomUserDetails;
-
 import java.util.UUID;
 
 public final class CurrentUser {

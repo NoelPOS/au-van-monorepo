@@ -1,27 +1,24 @@
 package com.auvan.backend.payment.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.payment.dto.ReviewPaymentRequest;
 import com.auvan.backend.payment.dto.SubmitPaymentProofRequest;
 import com.auvan.backend.shared.dto.PageResponse;
 import com.auvan.backend.payment.dto.PaymentResponse;
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.payment.Payment;
-import com.auvan.backend.seat.Seat;
-import com.auvan.backend.booking.BookingStatus;
-import com.auvan.backend.payment.PaymentStatus;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.payment.entity.Payment;
+import com.auvan.backend.seat.entity.Seat;
+import com.auvan.backend.booking.enums.BookingStatus;
+import com.auvan.backend.payment.enums.PaymentStatus;
 import com.auvan.backend.booking.event.BookingConfirmedEvent;
 import com.auvan.backend.payment.event.PaymentCompletedEvent;
 import com.auvan.backend.payment.event.PaymentFailedEvent;
 import com.auvan.backend.shared.exception.ConflictException;
 import com.auvan.backend.shared.exception.ForbiddenException;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
-
-import com.auvan.backend.booking.BookingRepository;
-import com.auvan.backend.payment.PaymentRepository;
+import com.auvan.backend.booking.repository.BookingRepository;
+import com.auvan.backend.payment.repository.PaymentRepository;
 import com.auvan.backend.audit.service.AuditLogService;
-import com.auvan.backend.payment.service.PaymentService;
 import com.auvan.backend.reminder.service.ReminderService;
 import com.auvan.backend.seat.service.SeatService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +28,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;

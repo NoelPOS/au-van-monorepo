@@ -1,9 +1,8 @@
 package com.auvan.backend.notification.dto;
 
-import com.auvan.backend.notification.DeliveryStatus;
-import com.auvan.backend.notification.NotificationChannel;
-import com.auvan.backend.notification.NotificationType;
-
+import com.auvan.backend.notification.enums.DeliveryStatus;
+import com.auvan.backend.notification.enums.NotificationChannel;
+import com.auvan.backend.notification.enums.NotificationType;
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;

@@ -1,30 +1,26 @@
 package com.auvan.backend.timeslot.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.timeslot.dto.BulkCreateTimeslotRequest;
 import com.auvan.backend.timeslot.dto.CreateTimeslotRequest;
 import com.auvan.backend.timeslot.dto.UpdateTimeslotRequest;
 import com.auvan.backend.timeslot.dto.TimeslotResponse;
-import com.auvan.backend.route.Route;
-import com.auvan.backend.seat.Seat;
-import com.auvan.backend.timeslot.Timeslot;
-import com.auvan.backend.route.RouteStatus;
-import com.auvan.backend.seat.SeatStatus;
-import com.auvan.backend.timeslot.TimeslotStatus;
+import com.auvan.backend.route.entity.Route;
+import com.auvan.backend.seat.entity.Seat;
+import com.auvan.backend.timeslot.entity.Timeslot;
+import com.auvan.backend.route.enums.RouteStatus;
+import com.auvan.backend.seat.enums.SeatStatus;
+import com.auvan.backend.timeslot.enums.TimeslotStatus;
 import com.auvan.backend.shared.exception.ConflictException;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
-
-import com.auvan.backend.route.RouteRepository;
-import com.auvan.backend.seat.SeatRepository;
-import com.auvan.backend.timeslot.TimeslotRepository;
-import com.auvan.backend.timeslot.service.TimeslotService;
+import com.auvan.backend.route.repository.RouteRepository;
+import com.auvan.backend.seat.repository.SeatRepository;
+import com.auvan.backend.timeslot.repository.TimeslotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;

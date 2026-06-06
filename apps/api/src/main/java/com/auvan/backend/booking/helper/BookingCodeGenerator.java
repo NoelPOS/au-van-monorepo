@@ -1,10 +1,9 @@
 package com.auvan.backend.booking.helper;
 
-import com.auvan.backend.booking.BookingRepository;
+import com.auvan.backend.booking.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 

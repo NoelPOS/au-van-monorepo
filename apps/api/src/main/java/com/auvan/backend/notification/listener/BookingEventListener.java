@@ -1,20 +1,19 @@
 package com.auvan.backend.notification.listener;
 
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.user.User;
-import com.auvan.backend.booking.CancellationReason;
-import com.auvan.backend.notification.NotificationType;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.booking.enums.CancellationReason;
+import com.auvan.backend.notification.enums.NotificationType;
 import com.auvan.backend.booking.event.BookingCancelledEvent;
 import com.auvan.backend.booking.event.BookingConfirmedEvent;
 import com.auvan.backend.booking.event.BookingCreatedEvent;
-import com.auvan.backend.user.UserRepository;
+import com.auvan.backend.user.repository.UserRepository;
 import com.auvan.backend.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 import java.util.UUID;
 

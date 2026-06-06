@@ -1,9 +1,7 @@
 package com.auvan.backend.seat.service;
 
-import com.auvan.backend.seat.Seat;
+import com.auvan.backend.seat.entity.Seat;
 import com.auvan.backend.seat.dto.SeatResponse;
-import com.auvan.backend.shared.exception.SeatLockException;
-
 import java.util.List;
 import java.util.UUID;
 

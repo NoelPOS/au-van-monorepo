@@ -1,18 +1,15 @@
 package com.auvan.backend.auth.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.auth.dto.LoginRequest;
 import com.auvan.backend.auth.dto.RegisterRequest;
 import com.auvan.backend.auth.dto.AuthResponse;
-import com.auvan.backend.user.User;
-import com.auvan.backend.auth.AuthProvider;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.auth.enums.AuthProvider;
 import com.auvan.backend.shared.exception.ConflictException;
 import com.auvan.backend.shared.exception.UnauthorizedException;
-
-import com.auvan.backend.user.UserRepository;
+import com.auvan.backend.user.repository.UserRepository;
 import com.auvan.backend.shared.security.JwtTokenProvider;
-import com.auvan.backend.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,22 +1,18 @@
 package com.auvan.backend.seat.service;
 
 import com.auvan.backend.shared.mapper.EntityMappers;
-
 import com.auvan.backend.seat.dto.SeatResponse;
-import com.auvan.backend.seat.Seat;
-import com.auvan.backend.seat.SeatStatus;
+import com.auvan.backend.seat.entity.Seat;
+import com.auvan.backend.seat.enums.SeatStatus;
 import com.auvan.backend.shared.exception.ResourceNotFoundException;
 import com.auvan.backend.shared.exception.SeatLockException;
-
-import com.auvan.backend.seat.SeatRepository;
-import com.auvan.backend.timeslot.TimeslotRepository;
-import com.auvan.backend.seat.service.SeatService;
+import com.auvan.backend.seat.repository.SeatRepository;
+import com.auvan.backend.timeslot.repository.TimeslotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;

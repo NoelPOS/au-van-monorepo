@@ -1,7 +1,6 @@
 package com.auvan.backend.user.dto;
 
-import com.auvan.backend.auth.AuthProvider;
-
+import com.auvan.backend.auth.enums.AuthProvider;
 import java.time.Instant;
 import java.util.UUID;
 

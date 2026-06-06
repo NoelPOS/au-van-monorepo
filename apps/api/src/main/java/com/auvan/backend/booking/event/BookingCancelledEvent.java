@@ -1,7 +1,7 @@
 package com.auvan.backend.booking.event;
 
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.booking.CancellationReason;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.booking.enums.CancellationReason;
 import org.springframework.context.ApplicationEvent;
 
 public class BookingCancelledEvent extends ApplicationEvent {

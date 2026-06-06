@@ -1,17 +1,16 @@
 package com.auvan.backend.reminder.service;
 
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.reminder.ReminderJob;
-import com.auvan.backend.route.Route;
-import com.auvan.backend.timeslot.Timeslot;
-import com.auvan.backend.user.User;
-import com.auvan.backend.notification.NotificationType;
-import com.auvan.backend.reminder.ReminderStatus;
-import com.auvan.backend.reminder.ReminderType;
-import com.auvan.backend.booking.BookingRepository;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.reminder.entity.ReminderJob;
+import com.auvan.backend.route.entity.Route;
+import com.auvan.backend.timeslot.entity.Timeslot;
+import com.auvan.backend.user.entity.User;
+import com.auvan.backend.notification.enums.NotificationType;
+import com.auvan.backend.reminder.enums.ReminderStatus;
+import com.auvan.backend.reminder.enums.ReminderType;
+import com.auvan.backend.booking.repository.BookingRepository;
 import com.auvan.backend.notification.service.NotificationService;
-import com.auvan.backend.reminder.ReminderJobRepository;
-import com.auvan.backend.reminder.service.ReminderServiceImpl;
+import com.auvan.backend.reminder.repository.ReminderJobRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;

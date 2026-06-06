@@ -1,24 +1,20 @@
 package com.auvan.backend.seat.service;
 
-import com.auvan.backend.seat.Seat;
-import com.auvan.backend.timeslot.Timeslot;
-import com.auvan.backend.seat.SeatStatus;
+import com.auvan.backend.seat.entity.Seat;
+import com.auvan.backend.timeslot.entity.Timeslot;
+import com.auvan.backend.seat.enums.SeatStatus;
 import com.auvan.backend.shared.exception.SeatLockException;
-
-import com.auvan.backend.seat.SeatRepository;
-import com.auvan.backend.timeslot.TimeslotRepository;
-import com.auvan.backend.seat.service.SeatServiceImpl;
+import com.auvan.backend.seat.repository.SeatRepository;
+import com.auvan.backend.timeslot.repository.TimeslotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;

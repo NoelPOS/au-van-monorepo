@@ -21,31 +21,42 @@ The backend is grouped by domain, similar to a small NestJS project:
 booking/
   controller/
   dto/
+  entity/
+    Booking.java
+  enums/
+    BookingStatus.java
+    CancellationReason.java
+    SourceChannel.java
   event/
   helper/
+  repository/
+    BookingRepository.java
   scheduler/
-  Booking.java
-  BookingRepository.java
-  BookingStatus.java
   service/
 
 payment/
   controller/
   dto/
+  entity/
+    Payment.java
+  enums/
+    PaymentMethod.java
+    PaymentStatus.java
   event/
-  Payment.java
-  PaymentRepository.java
+  repository/
+    PaymentRepository.java
   service/
 
 shared/
   config/
   dto/
   exception/
+  idempotency/
   mapper/
   security/
 ```
 
-Each domain keeps its controller, DTOs, service, repository, entity, enum, events, and schedulers close together. Shared infrastructure stays under `shared/`.
+Each domain keeps its controller, DTOs, service, repository, entity, enum, events, and schedulers close together. Domains only get folders they actually need: `line` has no repository because it does not own a table, and `dashboard` has no repository because it aggregates other domains. Shared infrastructure stays under `shared/`.
 
 ## Simplicity Rule
 

@@ -8,16 +8,15 @@ import com.auvan.backend.route.dto.RouteResponse;
 import com.auvan.backend.seat.dto.SeatResponse;
 import com.auvan.backend.timeslot.dto.TimeslotResponse;
 import com.auvan.backend.user.dto.UserResponse;
-import com.auvan.backend.audit.AuditLog;
-import com.auvan.backend.booking.Booking;
-import com.auvan.backend.notification.Notification;
-import com.auvan.backend.payment.Payment;
-import com.auvan.backend.route.Route;
-import com.auvan.backend.seat.Seat;
-import com.auvan.backend.timeslot.Timeslot;
-import com.auvan.backend.user.User;
+import com.auvan.backend.audit.entity.AuditLog;
+import com.auvan.backend.booking.entity.Booking;
+import com.auvan.backend.notification.entity.Notification;
+import com.auvan.backend.payment.entity.Payment;
+import com.auvan.backend.route.entity.Route;
+import com.auvan.backend.seat.entity.Seat;
+import com.auvan.backend.timeslot.entity.Timeslot;
+import com.auvan.backend.user.entity.User;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component

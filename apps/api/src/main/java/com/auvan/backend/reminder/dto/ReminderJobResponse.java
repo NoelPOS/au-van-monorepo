@@ -1,8 +1,7 @@
 package com.auvan.backend.reminder.dto;
 
-import com.auvan.backend.reminder.ReminderStatus;
-import com.auvan.backend.reminder.ReminderType;
-
+import com.auvan.backend.reminder.enums.ReminderStatus;
+import com.auvan.backend.reminder.enums.ReminderType;
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;

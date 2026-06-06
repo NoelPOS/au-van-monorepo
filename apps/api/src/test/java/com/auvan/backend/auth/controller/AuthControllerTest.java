@@ -1,12 +1,11 @@
 package com.auvan.backend.auth.controller;
 
-import com.auvan.backend.auth.controller.AuthController;
 import com.auvan.backend.auth.dto.LoginRequest;
 import com.auvan.backend.auth.dto.RegisterRequest;
 import com.auvan.backend.shared.dto.ApiResponse;
 import com.auvan.backend.auth.dto.AuthResponse;
 import com.auvan.backend.user.dto.UserResponse;
-import com.auvan.backend.auth.AuthProvider;
+import com.auvan.backend.auth.enums.AuthProvider;
 import com.auvan.backend.auth.service.AuthService;
 import com.auvan.backend.auth.service.LineAuthService;
 import org.junit.jupiter.api.Test;
@@ -15,10 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
 import java.time.Instant;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
