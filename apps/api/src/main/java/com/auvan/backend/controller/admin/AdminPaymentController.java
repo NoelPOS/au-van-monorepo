@@ -1,10 +1,10 @@
 package com.auvan.backend.controller.admin;
 
+import com.auvan.backend.controller.CurrentUser;
 import com.auvan.backend.dto.request.ReviewPaymentRequest;
 import com.auvan.backend.dto.response.ApiResponse;
 import com.auvan.backend.dto.response.PageResponse;
 import com.auvan.backend.dto.response.PaymentResponse;
-import com.auvan.backend.exception.UnauthorizedException;
 import com.auvan.backend.security.CustomUserDetails;
 import com.auvan.backend.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,18 +51,11 @@ public class AdminPaymentController {
             HttpServletRequest httpRequest) {
         PaymentResponse response = paymentService.reviewPayment(
                 id,
-                currentUserId(principal),
+                CurrentUser.id(principal),
                 request,
                 httpRequest.getRemoteAddr(),
                 httpRequest.getHeader("User-Agent")
         );
         return ResponseEntity.ok(ApiResponse.success(response, "Payment review completed"));
-    }
-
-    private UUID currentUserId(CustomUserDetails principal) {
-        if (principal == null) {
-            throw new UnauthorizedException("Authentication required");
-        }
-        return principal.getUserId();
     }
 }

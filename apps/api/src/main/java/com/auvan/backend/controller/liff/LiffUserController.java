@@ -1,9 +1,9 @@
 package com.auvan.backend.controller.liff;
 
+import com.auvan.backend.controller.CurrentUser;
 import com.auvan.backend.dto.request.UpdateUserRequest;
 import com.auvan.backend.dto.response.ApiResponse;
 import com.auvan.backend.dto.response.UserResponse;
-import com.auvan.backend.exception.UnauthorizedException;
 import com.auvan.backend.security.CustomUserDetails;
 import com.auvan.backend.service.UserService;
 import jakarta.validation.Valid;
@@ -27,21 +27,14 @@ public class LiffUserController {
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserResponse>> getMe(@AuthenticationPrincipal CustomUserDetails principal) {
-        return ResponseEntity.ok(ApiResponse.success(userService.getById(currentUserId(principal))));
+        return ResponseEntity.ok(ApiResponse.success(userService.getById(CurrentUser.id(principal))));
     }
 
     @PutMapping("/me")
     public ResponseEntity<ApiResponse<UserResponse>> updateMe(
             @AuthenticationPrincipal CustomUserDetails principal,
             @Valid @RequestBody UpdateUserRequest request) {
-        UserResponse response = userService.updateProfile(currentUserId(principal), request);
+        UserResponse response = userService.updateProfile(CurrentUser.id(principal), request);
         return ResponseEntity.ok(ApiResponse.success(response, "Profile updated"));
-    }
-
-    private UUID currentUserId(CustomUserDetails principal) {
-        if (principal == null) {
-            throw new UnauthorizedException("Authentication required");
-        }
-        return principal.getUserId();
     }
 }

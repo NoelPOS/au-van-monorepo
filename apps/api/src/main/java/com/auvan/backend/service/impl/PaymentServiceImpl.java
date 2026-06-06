@@ -34,8 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Slf4j
@@ -124,22 +124,9 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         if (newStatus == PaymentStatus.COMPLETED) {
-            payment.setPaidAt(Instant.now());
-            booking.setStatus(BookingStatus.CONFIRMED);
-            bookingRepository.save(booking);
-
-            reminderService.scheduleForBooking(booking.getId());
-            eventPublisher.publishEvent(new BookingConfirmedEvent(this, booking));
-            eventPublisher.publishEvent(new PaymentCompletedEvent(this, payment, booking));
+            approvePayment(payment, booking);
         } else {
-            // FAILED or REFUNDED: cancel the booking and free seats
-            booking.setStatus(BookingStatus.CANCELLED);
-            bookingRepository.save(booking);
-
-            List<UUID> seatIds = booking.getSeats().stream().map(Seat::getId).toList();
-            seatService.freeSeats(seatIds);
-            reminderService.cancelForBooking(booking.getId());
-            eventPublisher.publishEvent(new PaymentFailedEvent(this, payment, booking));
+            rejectPayment(payment, booking);
         }
 
         payment = paymentRepository.save(payment);
@@ -172,5 +159,27 @@ public class PaymentServiceImpl implements PaymentService {
     private Payment findOrThrow(UUID id) {
         return paymentRepository.findById(id)
                 .orElseThrow(() -> ResourceNotFoundException.of("Payment", id));
+    }
+
+    private void approvePayment(Payment payment, Booking booking) {
+        payment.setPaidAt(Instant.now());
+        booking.setStatus(BookingStatus.CONFIRMED);
+        bookingRepository.save(booking);
+
+        reminderService.scheduleForBooking(booking.getId());
+        eventPublisher.publishEvent(new BookingConfirmedEvent(this, booking));
+        eventPublisher.publishEvent(new PaymentCompletedEvent(this, payment, booking));
+    }
+
+    private void rejectPayment(Payment payment, Booking booking) {
+        booking.setStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+
+        List<UUID> seatIds = booking.getSeats().stream()
+                .map(Seat::getId)
+                .toList();
+        seatService.freeSeats(seatIds);
+        reminderService.cancelForBooking(booking.getId());
+        eventPublisher.publishEvent(new PaymentFailedEvent(this, payment, booking));
     }
 }

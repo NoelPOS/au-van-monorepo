@@ -1,9 +1,9 @@
 package com.auvan.backend.controller.admin;
 
+import com.auvan.backend.controller.CurrentUser;
 import com.auvan.backend.dto.response.ApiResponse;
 import com.auvan.backend.dto.response.BookingResponse;
 import com.auvan.backend.dto.response.PageResponse;
-import com.auvan.backend.exception.UnauthorizedException;
 import com.auvan.backend.security.CustomUserDetails;
 import com.auvan.backend.service.BookingService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class AdminBookingController {
     public ResponseEntity<ApiResponse<BookingResponse>> getById(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id) {
-        BookingResponse response = bookingService.getById(id, currentUserId(principal));
+        BookingResponse response = bookingService.getById(id, CurrentUser.id(principal));
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
@@ -46,14 +46,7 @@ public class AdminBookingController {
     public ResponseEntity<ApiResponse<Void>> cancel(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id) {
-        bookingService.cancel(id, currentUserId(principal), true);
+        bookingService.cancel(id, CurrentUser.id(principal), true);
         return ResponseEntity.ok(ApiResponse.success("Booking cancelled"));
-    }
-
-    private UUID currentUserId(CustomUserDetails principal) {
-        if (principal == null) {
-            throw new UnauthorizedException("Authentication required");
-        }
-        return principal.getUserId();
     }
 }

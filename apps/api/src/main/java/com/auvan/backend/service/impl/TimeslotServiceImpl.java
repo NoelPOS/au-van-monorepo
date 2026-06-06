@@ -72,10 +72,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     public TimeslotResponse create(CreateTimeslotRequest request) {
-        Route route = routeRepository.findById(request.routeId())
-                .filter(r -> r.getStatus() == RouteStatus.ACTIVE)
-                .orElseThrow(() -> ResourceNotFoundException.of("Route", request.routeId()));
-
+        Route route = findActiveRoute(request.routeId());
         Timeslot timeslot = buildTimeslot(route, request.date(), request.time(), request.totalSeats());
         timeslot = timeslotRepository.save(timeslot);
         generateSeats(timeslot);
@@ -85,10 +82,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     public List<TimeslotResponse> bulkCreate(BulkCreateTimeslotRequest request) {
-        Route route = routeRepository.findById(request.routeId())
-                .filter(r -> r.getStatus() == RouteStatus.ACTIVE)
-                .orElseThrow(() -> ResourceNotFoundException.of("Route", request.routeId()));
-
+        Route route = findActiveRoute(request.routeId());
         if (request.dateFrom().isAfter(request.dateTo())) {
             throw new ConflictException("dateFrom must not be after dateTo");
         }
@@ -141,6 +135,12 @@ public class TimeslotServiceImpl implements TimeslotService {
         t.setTotalSeats(totalSeats);
         t.setStatus(TimeslotStatus.ACTIVE);
         return t;
+    }
+
+    private Route findActiveRoute(UUID routeId) {
+        return routeRepository.findById(routeId)
+                .filter(route -> route.getStatus() == RouteStatus.ACTIVE)
+                .orElseThrow(() -> ResourceNotFoundException.of("Route", routeId));
     }
 
     private void generateSeats(Timeslot timeslot) {

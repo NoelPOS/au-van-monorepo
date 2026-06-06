@@ -1,5 +1,6 @@
 package com.auvan.backend.controller.liff;
 
+import com.auvan.backend.controller.CurrentUser;
 import com.auvan.backend.dto.request.CreateBookingRequest;
 import com.auvan.backend.dto.request.RescheduleRequest;
 import com.auvan.backend.dto.request.SubmitPaymentProofRequest;
@@ -7,7 +8,6 @@ import com.auvan.backend.dto.request.UpdateBookingRequest;
 import com.auvan.backend.dto.response.ApiResponse;
 import com.auvan.backend.dto.response.BookingResponse;
 import com.auvan.backend.dto.response.PaymentResponse;
-import com.auvan.backend.exception.UnauthorizedException;
 import com.auvan.backend.security.CustomUserDetails;
 import com.auvan.backend.service.BookingService;
 import com.auvan.backend.service.PaymentService;
@@ -39,7 +39,7 @@ public class LiffBookingController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<BookingResponse>>> getMyBookings(
             @AuthenticationPrincipal CustomUserDetails principal) {
-        List<BookingResponse> bookings = bookingService.getMyBookings(currentUserId(principal));
+        List<BookingResponse> bookings = bookingService.getMyBookings(CurrentUser.id(principal));
         return ResponseEntity.ok(ApiResponse.success(bookings));
     }
 
@@ -47,7 +47,7 @@ public class LiffBookingController {
     public ResponseEntity<ApiResponse<BookingResponse>> createBooking(
             @AuthenticationPrincipal CustomUserDetails principal,
             @Valid @RequestBody CreateBookingRequest request) {
-        BookingResponse response = bookingService.createBooking(currentUserId(principal), request);
+        BookingResponse response = bookingService.createBooking(CurrentUser.id(principal), request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(response, "Booking created"));
     }
@@ -56,7 +56,7 @@ public class LiffBookingController {
     public ResponseEntity<ApiResponse<BookingResponse>> getById(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id) {
-        BookingResponse response = bookingService.getById(id, currentUserId(principal));
+        BookingResponse response = bookingService.getById(id, CurrentUser.id(principal));
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
@@ -65,7 +65,7 @@ public class LiffBookingController {
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id,
             @Valid @RequestBody UpdateBookingRequest request) {
-        BookingResponse response = bookingService.update(id, currentUserId(principal), request);
+        BookingResponse response = bookingService.update(id, CurrentUser.id(principal), request);
         return ResponseEntity.ok(ApiResponse.success(response, "Booking updated"));
     }
 
@@ -73,7 +73,7 @@ public class LiffBookingController {
     public ResponseEntity<ApiResponse<Void>> cancel(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id) {
-        bookingService.cancel(id, currentUserId(principal), false);
+        bookingService.cancel(id, CurrentUser.id(principal), false);
         return ResponseEntity.ok(ApiResponse.success("Booking cancelled"));
     }
 
@@ -82,7 +82,7 @@ public class LiffBookingController {
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id,
             @Valid @RequestBody RescheduleRequest request) {
-        BookingResponse response = bookingService.reschedule(id, currentUserId(principal), request);
+        BookingResponse response = bookingService.reschedule(id, CurrentUser.id(principal), request);
         return ResponseEntity.ok(ApiResponse.success(response, "Booking rescheduled"));
     }
 
@@ -91,14 +91,7 @@ public class LiffBookingController {
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id,
             @Valid @RequestBody SubmitPaymentProofRequest request) {
-        PaymentResponse response = paymentService.submitProof(id, currentUserId(principal), request);
+        PaymentResponse response = paymentService.submitProof(id, CurrentUser.id(principal), request);
         return ResponseEntity.ok(ApiResponse.success(response, "Payment proof submitted"));
-    }
-
-    private UUID currentUserId(CustomUserDetails principal) {
-        if (principal == null) {
-            throw new UnauthorizedException("Authentication required");
-        }
-        return principal.getUserId();
     }
 }

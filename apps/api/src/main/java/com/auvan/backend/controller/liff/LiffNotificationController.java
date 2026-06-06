@@ -1,9 +1,9 @@
 package com.auvan.backend.controller.liff;
 
+import com.auvan.backend.controller.CurrentUser;
 import com.auvan.backend.dto.response.ApiResponse;
 import com.auvan.backend.dto.response.NotificationResponse;
 import com.auvan.backend.dto.response.PageResponse;
-import com.auvan.backend.exception.UnauthorizedException;
 import com.auvan.backend.security.CustomUserDetails;
 import com.auvan.backend.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +32,14 @@ public class LiffNotificationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         PageResponse<NotificationResponse> response =
-                notificationService.getMyNotifications(currentUserId(principal), page, size);
+                notificationService.getMyNotifications(CurrentUser.id(principal), page, size);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @GetMapping("/unread-count")
     public ResponseEntity<ApiResponse<Map<String, Long>>> countUnread(
             @AuthenticationPrincipal CustomUserDetails principal) {
-        long unread = notificationService.countUnread(currentUserId(principal));
+        long unread = notificationService.countUnread(CurrentUser.id(principal));
         return ResponseEntity.ok(ApiResponse.success(Map.of("unread", unread)));
     }
 
@@ -47,14 +47,7 @@ public class LiffNotificationController {
     public ResponseEntity<ApiResponse<NotificationResponse>> markRead(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable UUID id) {
-        NotificationResponse response = notificationService.markRead(id, currentUserId(principal));
+        NotificationResponse response = notificationService.markRead(id, CurrentUser.id(principal));
         return ResponseEntity.ok(ApiResponse.success(response, "Notification marked as read"));
-    }
-
-    private UUID currentUserId(CustomUserDetails principal) {
-        if (principal == null) {
-            throw new UnauthorizedException("Authentication required");
-        }
-        return principal.getUserId();
     }
 }

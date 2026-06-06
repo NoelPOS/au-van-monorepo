@@ -8,7 +8,6 @@ import com.auvan.backend.dto.request.UpdateBookingRequest;
 import com.auvan.backend.dto.response.BookingResponse;
 import com.auvan.backend.dto.response.PageResponse;
 import com.auvan.backend.entity.Booking;
-import com.auvan.backend.entity.IdempotencyKey;
 import com.auvan.backend.entity.Payment;
 import com.auvan.backend.entity.Route;
 import com.auvan.backend.entity.Seat;
@@ -16,7 +15,6 @@ import com.auvan.backend.entity.Timeslot;
 import com.auvan.backend.entity.User;
 import com.auvan.backend.enums.BookingStatus;
 import com.auvan.backend.enums.CancellationReason;
-import com.auvan.backend.enums.IdempotencyStatus;
 import com.auvan.backend.enums.PaymentMethod;
 import com.auvan.backend.enums.PaymentStatus;
 import com.auvan.backend.enums.RouteStatus;
@@ -36,12 +34,12 @@ import com.auvan.backend.repository.SeatRepository;
 import com.auvan.backend.repository.TimeslotRepository;
 import com.auvan.backend.repository.UserRepository;
 import com.auvan.backend.service.BookingService;
-import com.auvan.backend.service.IdempotencyService;
 import com.auvan.backend.service.ReminderService;
 import com.auvan.backend.service.SeatService;
+import com.auvan.backend.service.helper.BookingCodeGenerator;
+import com.auvan.backend.service.helper.BookingIdempotencyHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
@@ -52,11 +50,9 @@ import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -78,37 +74,22 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
     private final SeatService seatService;
     private final ReminderService reminderService;
-    private final IdempotencyService idempotencyService;
     private final EntityMappers mappers;
     private final ApplicationEventPublisher eventPublisher;
+    private final BookingIdempotencyHelper idempotency;
+    private final BookingCodeGenerator bookingCodeGenerator;
 
     @Override
     @Transactional
     public BookingResponse createBooking(UUID userId, CreateBookingRequest request) {
-        Optional<BookingResponse> replayResponse = findReplayResponse(
-                userId,
-                BOOKING_CREATE_SCOPE,
-                request.idempotencyKey()
-        );
-        if (replayResponse.isPresent()) {
-            return replayResponse.get();
-        }
-
-        IdempotencyKey idempotencyKey = startIdempotentRequest(
+        return idempotency.run(
                 userId,
                 BOOKING_CREATE_SCOPE,
                 request.idempotencyKey(),
-                request
+                request,
+                201,
+                () -> doCreateBooking(userId, request)
         );
-
-        try {
-            BookingResponse response = doCreateBooking(userId, request);
-            completeIdempotentRequest(idempotencyKey, response, 201);
-            return response;
-        } catch (RuntimeException ex) {
-            failIdempotentRequest(idempotencyKey, ex);
-            throw ex;
-        }
     }
 
     @Override
@@ -180,22 +161,6 @@ public class BookingServiceImpl implements BookingService {
             throw new ConflictException("Only confirmed or pending-payment bookings can be rescheduled");
         }
 
-        Optional<BookingResponse> replayResponse = findReplayResponse(
-                userId,
-                BOOKING_RESCHEDULE_SCOPE,
-                request.idempotencyKey()
-        );
-        if (replayResponse.isPresent()) {
-            return replayResponse.get();
-        }
-
-        IdempotencyKey idempotencyKey = startIdempotentRequest(
-                userId,
-                BOOKING_RESCHEDULE_SCOPE,
-                request.idempotencyKey(),
-                request
-        );
-
         PaymentMethod paymentMethod = original.getPayment() != null
                 ? original.getPayment().getMethod() : PaymentMethod.CASH;
 
@@ -211,15 +176,18 @@ public class BookingServiceImpl implements BookingService {
                 request.idempotencyKey()
         );
 
-        try {
-            BookingResponse response = doCreateBooking(userId, createRequest, original);
-            cancel(original.getId(), userId, false);
-            completeIdempotentRequest(idempotencyKey, response, 200);
-            return response;
-        } catch (RuntimeException ex) {
-            failIdempotentRequest(idempotencyKey, ex);
-            throw ex;
-        }
+        return idempotency.run(
+                userId,
+                BOOKING_RESCHEDULE_SCOPE,
+                request.idempotencyKey(),
+                request,
+                200,
+                () -> {
+                    BookingResponse response = doCreateBooking(userId, createRequest, original);
+                    cancel(original.getId(), userId, false);
+                    return response;
+                }
+        );
     }
 
     @Override
@@ -270,50 +238,6 @@ public class BookingServiceImpl implements BookingService {
         }
 
         return mappers.toBooking(booking);
-    }
-
-    private Optional<BookingResponse> findReplayResponse(UUID userId, String scope, String idempotencyKey) {
-        if (!StringUtils.hasText(idempotencyKey)) {
-            return Optional.empty();
-        }
-
-        return idempotencyService.find(userId, scope, idempotencyKey)
-                .map(record -> {
-                    if (record.getStatus() == IdempotencyStatus.IN_PROGRESS) {
-                        throw new ConflictException("This request is already being processed", "DUPLICATE_REQUEST");
-                    }
-                    if (record.getStatus() == IdempotencyStatus.COMPLETED && record.getResponseData() != null) {
-                        return mappers.toBooking(
-                                bookingRepository.findById(UUID.fromString(record.getResponseData().toString()))
-                                        .orElseThrow(() -> ResourceNotFoundException.of("Booking", record.getResponseData())));
-                    }
-                    return null;
-                });
-    }
-
-    private IdempotencyKey startIdempotentRequest(UUID userId, String scope, String key, Object requestBody) {
-        if (!StringUtils.hasText(key)) {
-            return null;
-        }
-
-        return idempotencyService.startRequest(
-                userId,
-                scope,
-                key,
-                requestBody
-        );
-    }
-
-    private void completeIdempotentRequest(IdempotencyKey idempotencyKey, BookingResponse response, int statusCode) {
-        if (idempotencyKey != null) {
-            idempotencyService.completeRequest(idempotencyKey.getId(), response.id().toString(), statusCode);
-        }
-    }
-
-    private void failIdempotentRequest(IdempotencyKey idempotencyKey, RuntimeException ex) {
-        if (idempotencyKey != null) {
-            idempotencyService.failRequest(idempotencyKey.getId(), ex.getMessage());
-        }
     }
 
     private Route findActiveRoute(UUID routeId) {
@@ -395,15 +319,6 @@ public class BookingServiceImpl implements BookingService {
                 || booking.getStatus() == BookingStatus.PENDING_PAYMENT;
     }
 
-    private Booking buildBookingEntity(UUID userId, CreateBookingRequest request) {
-        Route route = routeRepository.findById(request.routeId())
-                .orElseThrow(() -> ResourceNotFoundException.of("Route", request.routeId()));
-        Timeslot timeslot = timeslotRepository.findById(request.timeslotId())
-                .orElseThrow(() -> ResourceNotFoundException.of("Timeslot", request.timeslotId()));
-        List<Seat> seats = seatRepository.findAllById(request.seatIds());
-        return buildBookingEntity(userId, request, route, timeslot, seats, computePaymentDueAt(timeslot));
-    }
-
     private Booking buildBookingEntity(
             UUID userId,
             CreateBookingRequest request,
@@ -424,7 +339,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setStatus(initialStatusFor(request.paymentMethod()));
         booking.setPaymentDueAt(paymentDueAt);
         booking.setSourceChannel(request.sourceChannel() != null ? request.sourceChannel() : SourceChannel.LIFF);
-        booking.setBookingCode(generateUniqueBookingCode());
+        booking.setBookingCode(bookingCodeGenerator.generate());
         booking.setTotalPrice(route.getPrice().multiply(BigDecimal.valueOf(seats.size())));
         return booking;
     }
@@ -439,20 +354,6 @@ public class BookingServiceImpl implements BookingService {
         return LocalDateTime.of(timeslot.getDate(), timeslot.getTime())
                 .minusMinutes(paymentDeadlineMinutes)
                 .toInstant(ZoneOffset.UTC);
-    }
-
-    private String generateUniqueBookingCode() {
-        String datePart = LocalDate.now()
-                .format(java.time.format.DateTimeFormatter.ofPattern("yyMMdd"));
-
-        for (int attempt = 0; attempt < 10; attempt++) {
-            String code = "AUV-" + datePart + "-" + RandomStringUtils.secure().nextAlphanumeric(5).toUpperCase();
-            if (!bookingRepository.existsByBookingCode(code)) {
-                return code;
-            }
-        }
-
-        throw new IllegalStateException("Could not generate unique booking code after 10 attempts");
     }
 
     private Booking findOrThrow(UUID id) {

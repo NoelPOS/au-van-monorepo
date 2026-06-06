@@ -29,6 +29,8 @@ import com.auvan.backend.repository.SeatRepository;
 import com.auvan.backend.repository.TimeslotRepository;
 import com.auvan.backend.repository.UserRepository;
 import com.auvan.backend.service.impl.BookingServiceImpl;
+import com.auvan.backend.service.helper.BookingCodeGenerator;
+import com.auvan.backend.service.helper.BookingIdempotencyHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -84,6 +86,16 @@ class BookingServiceImplTest {
 
     @BeforeEach
     void setUp() {
+        setField(
+                bookingService,
+                "idempotency",
+                new BookingIdempotencyHelper(idempotencyService, bookingRepository, mappers)
+        );
+        setField(
+                bookingService,
+                "bookingCodeGenerator",
+                new BookingCodeGenerator(bookingRepository)
+        );
         setField(bookingService, "paymentDeadlineMinutes", 60);
 
         userId = UUID.randomUUID();

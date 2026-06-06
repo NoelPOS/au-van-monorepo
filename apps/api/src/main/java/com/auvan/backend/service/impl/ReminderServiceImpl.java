@@ -80,35 +80,12 @@ public class ReminderServiceImpl implements ReminderService {
         int processed = 0;
         for (ReminderJob job : jobs) {
             try {
-                job.setStatus(ReminderStatus.PROCESSING);
-                job.setLockedAt(Instant.now());
-                reminderJobRepository.save(job);
-
+                markProcessing(job);
                 sendReminderNotification(job);
-
-                job.setStatus(ReminderStatus.SENT);
-                job.setSentAt(Instant.now());
-                job.setLockedAt(null);
+                markSent(job);
                 processed++;
             } catch (Exception ex) {
-                log.error(
-                        "Reminder job {} failed (attempt {}): {}",
-                        job.getId(),
-                        job.getAttempts() + 1,
-                        ex.getMessage()
-                );
-
-                job.setAttempts(job.getAttempts() + 1);
-                job.setLastError(ex.getMessage());
-                job.setLockedAt(null);
-
-                if (job.getAttempts() >= maxAttempts) {
-                    job.setStatus(ReminderStatus.FAILED);
-                    log.warn("Reminder job {} permanently failed after {} attempts", job.getId(), maxAttempts);
-                } else {
-                    job.setStatus(ReminderStatus.PENDING);
-                    job.setRunAt(Instant.now().plusSeconds(300L * job.getAttempts()));
-                }
+                markFailedAttempt(job, ex);
             }
 
             reminderJobRepository.save(job);
@@ -189,5 +166,35 @@ public class ReminderServiceImpl implements ReminderService {
                         "bookingCode", bookingCode
                 )
         );
+    }
+
+    private void markProcessing(ReminderJob job) {
+        job.setStatus(ReminderStatus.PROCESSING);
+        job.setLockedAt(Instant.now());
+        reminderJobRepository.save(job);
+    }
+
+    private void markSent(ReminderJob job) {
+        job.setStatus(ReminderStatus.SENT);
+        job.setSentAt(Instant.now());
+        job.setLockedAt(null);
+    }
+
+    private void markFailedAttempt(ReminderJob job, Exception ex) {
+        int nextAttempt = job.getAttempts() + 1;
+        log.error("Reminder job {} failed (attempt {}): {}", job.getId(), nextAttempt, ex.getMessage());
+
+        job.setAttempts(nextAttempt);
+        job.setLastError(ex.getMessage());
+        job.setLockedAt(null);
+
+        if (nextAttempt >= maxAttempts) {
+            job.setStatus(ReminderStatus.FAILED);
+            log.warn("Reminder job {} permanently failed after {} attempts", job.getId(), maxAttempts);
+            return;
+        }
+
+        job.setStatus(ReminderStatus.PENDING);
+        job.setRunAt(Instant.now().plusSeconds(300L * nextAttempt));
     }
 }

@@ -1,9 +1,9 @@
 package com.auvan.backend.controller.liff;
 
+import com.auvan.backend.controller.CurrentUser;
 import com.auvan.backend.dto.request.LockSeatsRequest;
 import com.auvan.backend.dto.response.ApiResponse;
 import com.auvan.backend.dto.response.SeatResponse;
-import com.auvan.backend.exception.UnauthorizedException;
 import com.auvan.backend.security.CustomUserDetails;
 import com.auvan.backend.service.SeatService;
 import jakarta.validation.Valid;
@@ -36,16 +36,9 @@ public class LiffSeatController {
     public ResponseEntity<ApiResponse<List<SeatResponse>>> lockSeats(
             @AuthenticationPrincipal CustomUserDetails principal,
             @Valid @RequestBody LockSeatsRequest request) {
-        UUID userId = currentUserId(principal);
+        UUID userId = CurrentUser.id(principal);
         seatService.lockSeats(request.timeslotId(), request.seatIds(), userId);
         List<SeatResponse> updatedSeatMap = seatService.getSeatMap(request.timeslotId());
         return ResponseEntity.ok(ApiResponse.success(updatedSeatMap, "Seats locked"));
-    }
-
-    private UUID currentUserId(CustomUserDetails principal) {
-        if (principal == null) {
-            throw new UnauthorizedException("Authentication required");
-        }
-        return principal.getUserId();
     }
 }

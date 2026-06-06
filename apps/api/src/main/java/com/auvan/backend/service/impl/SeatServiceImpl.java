@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -78,7 +77,9 @@ public class SeatServiceImpl implements SeatService {
     @Override
     @Transactional
     public void confirmSeats(List<UUID> seatIds, UUID userId) {
-        if (seatIds.isEmpty()) return;
+        if (seatIds.isEmpty()) {
+            return;
+        }
 
         List<Seat> seats = seatRepository.findByIdInAndLockedByAndStatus(
                 seatIds, userId, SeatStatus.LOCKED);
@@ -102,10 +103,14 @@ public class SeatServiceImpl implements SeatService {
     @Override
     @Transactional
     public void freeSeats(List<UUID> seatIds) {
-        if (seatIds.isEmpty()) return;
+        if (seatIds.isEmpty()) {
+            return;
+        }
 
         List<Seat> seats = seatRepository.findAllById(seatIds);
-        if (seats.isEmpty()) return;
+        if (seats.isEmpty()) {
+            return;
+        }
 
         UUID timeslotId = seats.get(0).getTimeslot().getId();
         long bookedCount = seats.stream()
