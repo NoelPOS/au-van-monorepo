@@ -2,11 +2,11 @@ package com.auvan.backend.line.controller;
 
 import com.auvan.backend.shared.dto.ApiResponse;
 import com.auvan.backend.shared.exception.UnauthorizedException;
-import com.auvan.backend.line.service.LineWebhookService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -24,6 +24,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/line")
@@ -32,7 +33,6 @@ public class LineWebhookController {
     @Value("${line.channel.secret:}")
     private String lineChannelSecret;
 
-    private final LineWebhookService lineWebhookService;
     private final ObjectMapper objectMapper;
 
     @PostMapping("/webhook")
@@ -44,8 +44,19 @@ public class LineWebhookController {
         }
 
         List<Map<String, Object>> events = extractEvents(rawBody);
-        lineWebhookService.handle(events);
+        for (Map<String, Object> event : events) {
+            log.info("Received LINE webhook event: type={}, sourceUserId={}",
+                    event.get("type"),
+                    extractSourceUserId(event));
+        }
+
         return ResponseEntity.ok(ApiResponse.success("Webhook processed"));
+    }
+
+    @SuppressWarnings("unchecked")
+    private String extractSourceUserId(Map<String, Object> event) {
+        Map<String, Object> source = (Map<String, Object>) event.get("source");
+        return source != null ? (String) source.get("userId") : null;
     }
 
     private List<Map<String, Object>> extractEvents(String rawBody) {

@@ -121,8 +121,10 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (newStatus == PaymentStatus.COMPLETED) {
             approvePayment(payment, booking);
-        } else {
-            rejectPayment(payment, booking);
+        } else if (newStatus == PaymentStatus.FAILED) {
+            rejectPaymentProof(payment, booking);
+        } else if (newStatus == PaymentStatus.REFUNDED) {
+            refundPayment(payment, booking);
         }
 
         payment = paymentRepository.save(payment);
@@ -167,7 +169,16 @@ public class PaymentServiceImpl implements PaymentService {
         eventPublisher.publishEvent(new PaymentCompletedEvent(this, payment, booking));
     }
 
-    private void rejectPayment(Payment payment, Booking booking) {
+    private void rejectPaymentProof(Payment payment, Booking booking) {
+        booking.setStatus(BookingStatus.PENDING_PAYMENT);
+        bookingRepository.save(booking);
+
+        reminderService.cancelForBooking(booking.getId());
+        eventPublisher.publishEvent(new PaymentFailedEvent(this, payment, booking));
+    }
+
+    private void refundPayment(Payment payment, Booking booking) {
+        payment.setRefundedAt(Instant.now());
         booking.setStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
 

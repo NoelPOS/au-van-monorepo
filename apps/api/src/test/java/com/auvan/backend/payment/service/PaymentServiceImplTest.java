@@ -82,7 +82,7 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void reviewPaymentRejectCancelsBookingAndFreesSeats() {
+    void reviewPaymentRejectReturnsBookingToPendingPayment() {
         UUID paymentId = UUID.randomUUID();
         UUID adminId = UUID.randomUUID();
 
@@ -107,8 +107,8 @@ class PaymentServiceImplTest {
         );
 
         assertThat(response.status()).isEqualTo(PaymentStatus.FAILED);
-        assertThat(booking.getStatus()).isEqualTo(BookingStatus.CANCELLED);
-        verify(seatService).freeSeats(any());
+        assertThat(booking.getStatus()).isEqualTo(BookingStatus.PENDING_PAYMENT);
+        verify(seatService, never()).freeSeats(any());
         verify(reminderService).cancelForBooking(booking.getId());
         verify(eventPublisher).publishEvent(any(PaymentFailedEvent.class));
     }
